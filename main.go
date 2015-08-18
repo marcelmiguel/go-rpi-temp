@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	//"io/ioutil"
 	"path/filepath"
 	"os/exec"
 	"sync"
@@ -25,18 +25,24 @@ func exe_cmd(cmd string, wg *sync.WaitGroup) {
 }
 
 func main() {
-	files, _ := ioutil.ReadDir("./")
+	//execute modprobes
+	wg := new(sync.WaitGroup)
+    wg.Add(2)
+    go exe_cmd("modprobe w1-gpio", wg)
+	go exe_cmd("modprobe w1-therm", wg)
+    wg.Wait()
+
+	files.
+
+	/*files, _ := ioutil.ReadDir("./")
 	for _, f:= range files {
 		fmt.Println(f.Name())
-	}
-	
-	files1, _ := filepath.Glob("*")
+	}*/
+
+	files1, _ := filepath.Glob("28*")
+	files1.
+	fmt.Println("")
 	fmt.Println(files1)
-	
-	//testing execution of exe
-	wg := new(sync.WaitGroup)
-    wg.Add(1)
-    go exe_cmd("curl", wg)
-    wg.Wait()
-	
+
+
 }
