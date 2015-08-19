@@ -1,2 +1,4 @@
 *.exe
 *.exe ~
+main
+go-rpi-temp
