@@ -1,17 +1,17 @@
-# RaspBerry Pi temperature with DS18B20
+# RaspBerry Pi temperature with DS18B20 in Go+
 
 ## Introduction
 Test program in Go+, to check:
  - cross compilling
- - Web performance
- - configuration 
- - performance
+ - Performance
+ - file operations
  - easy of development
+  - find an editor with highlighting and code completion, 
+   - multiplatform (Ubuntu and Windows)
 
-Based on: 
-https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/overview
+2015-08-19
 
-## WIP
+## WIP !!
 
 ## TODO
  - read temp from RaspBerryPi
@@ -21,9 +21,31 @@ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-
  - store graph on Plot.ly
  - serve temperature via web, polymer
  - Run as a service
+ - Respond to MAC, to change TCPIP
+ - celsius, err1 := strconv.ParseFloat(linea[li+1:], 32) , porque no devuelve flaot32
+ - REST interface, probar con curl, documentar API con swagger
+ - separar en una unit la lectura de datos y permitir multiplataforma, como cambair ese archivo por plataforma?
+ - whitelist/blacklist IP for web access
 
-## Hwd Schema
-Follow Adafruit link
- 
 ## Conclusions
- - none yet
+ - code editors 
+  - liteide **
+    - code completion, easy installation, quick. 
+    - code highlighting for other formats
+    - no git integration?
+  - atom.io with go-plus * 
+    - toooo slow, only small files
+  - sublime with gosublime  ???
+ - Using Go packages is different... GOPATH ...
+ - Go cross compilation before 1.5 was ok, after fantastic
+ - Default packages are good
+ - multiple return values, assigning an already created struct TODO
+ - Use of Interfaces and not clases ! Good !
+ - Language just in the mniddle of Pascal and C
+ - Love substring as Python
+
+## Links
+ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/overview
+ http://www.darrencoxall.com/golang/executing-commands-in-go/
+ http://blog.pivotal.io/pivotal-labs/labs/next-steps-in-go-code-organization
+ https://www.socketloop.com/tutorials/golang-how-to-run-golang-application-such-as-web-server-in-the-background-or-as-daemon
