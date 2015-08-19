@@ -9,7 +9,7 @@ import (
 	"sync"
 	"strings"
 	"strconv"
-	"dirs/utils"
+	"go-rpi-temp/utils"
 	"net/http"
 	"time"
 )
@@ -97,7 +97,7 @@ func handler(w http.ResponseWriter, r *http.Request, t <-chan Temperature) {
 }
 
 func readData(configuration *conf.Configuration, t chan Temperature) {
-	files1, _ := filepath.Glob("28*/w1_slave")
+	files1, _ := filepath.Glob(configuration.Pathw1+"28*/w1_slave")
 
     for {
 		if len(t)>0 {

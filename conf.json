@@ -1,5 +1,6 @@
 {
     "PlotlyAPIToken": "API1234",
     "PlotlySecret": "secret",
-	"Frequency":4
+	"Frequency":4,
+	"Pathw1" : "/sys/bus/w1/devices/"
 }

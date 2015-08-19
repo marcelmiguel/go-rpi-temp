@@ -10,6 +10,7 @@ type Configuration struct {
     PlotlyAPIToken  string
     PlotlySecret   	string
 	Frequency       int	
+	Pathw1          string
 }
 
 func Open() Configuration{
