@@ -27,6 +27,16 @@ Test program in Go+, to check:
  - separar en una unit la lectura de datos y permitir multiplataforma, como cambair ese archivo por plataforma?
  - whitelist/blacklist IP for web access
 
+## configuration
+ - sudo nano /etc/modules
+	add lines:
+	w1-gpio
+	w1-therm
+ - sudo nano /boot/config.txt
+    add line:
+	dtoverlay=w1-gpio
+    
+
 ## Conclusions
  - code editors 
   - liteide **
