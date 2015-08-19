@@ -26,8 +26,9 @@ Test program in Go+, to check:
  - REST interface, probar con curl, documentar API con swagger
  - separar en una unit la lectura de datos y permitir multiplataforma, como cambair ese archivo por plataforma?
  - whitelist/blacklist IP for web access
+ - save data to sqllite
 
-## configuration
+## Configuration
  - sudo nano /etc/modules
 	add lines:
 	w1-gpio
@@ -35,7 +36,12 @@ Test program in Go+, to check:
  - sudo nano /boot/config.txt
     add line:
 	dtoverlay=w1-gpio
-    
+
+## Requeriments
+ - Go 1.5
+
+## Compiling for RaspBerryPi
+ - env GOOS=linux GOARCH=arm GOARM=7 go build main.go    
 
 ## Conclusions
  - code editors 

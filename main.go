@@ -12,6 +12,7 @@ import (
 	"go-rpi-temp/utils"
 	"net/http"
 	"time"
+	"encoding/json"
 )
 
 type Temperature struct {
@@ -19,9 +20,11 @@ type Temperature struct {
     Farenheit float64
 	Id string //serial number
 	Valid bool
+	UpDown bool
 }
 
 var temp Temperature
+var prev Temperature
 
 func exe_cmd(cmd string, wg *sync.WaitGroup) {
   fmt.Println("command is ",cmd)
@@ -89,13 +92,36 @@ func ReadTemp(file string) Temperature {
 
 func handler(w http.ResponseWriter, r *http.Request, t <-chan Temperature) {
 	if len(t)>0 {
+		prev = temp
 		temp = <- t
+		if prev.Celsius<temp.Celsius {
+			temp.UpDown = true
+		} else {
+			temp.UpDown = false
+		}
 	}
 	if temp.Valid {
+		
 		fmt.Fprintf(w, "Temperature %s : %g", temp.Id, temp.Celsius)	
 	}
 }
 
+func handlerREST(w http.ResponseWriter, r *http.Request, t <-chan Temperature) {
+	if len(t)>0 {
+		prev = temp
+		temp = <- t
+		if prev.Celsius<temp.Celsius {
+			temp.UpDown = true
+		} else {
+			temp.UpDown = false
+		}
+	}
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+   	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(temp); err != nil {
+        fmt.Fprintf(w, "Error", err)
+    }
+}
 func readData(configuration *conf.Configuration, t chan Temperature) {
 	files1, _ := filepath.Glob(configuration.Pathw1+"28*/w1_slave")
 
@@ -113,7 +139,7 @@ func readData(configuration *conf.Configuration, t chan Temperature) {
 		time.Sleep(time.Duration(configuration.Frequency) * time.Second)
     }
 }
-	
+
 func main() {
 	//execute modprobes
 	wg := new(sync.WaitGroup)
@@ -133,6 +159,9 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
               handler(w, r, t)
+       })
+	http.HandleFunc("/api/v1/temp", func(w http.ResponseWriter, r *http.Request) {
+              handlerREST(w, r, t)
        })
     http.ListenAndServe(":8080", nil)
 	
