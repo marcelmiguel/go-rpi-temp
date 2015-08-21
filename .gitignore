@@ -1,5 +1,5 @@
 *.exe
-*.exe ~
+*.exe~
 main
 go-rpi-temp
 .idea
