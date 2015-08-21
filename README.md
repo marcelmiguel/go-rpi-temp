@@ -43,6 +43,9 @@ Test program in Go+, to check:
 ## Compiling for RaspBerryPi
  - env GOOS=linux GOARCH=arm GOARM=7 go build main.go    
 
+## Test
+ - curl -X GET http://127.0.0.1:8080/api/v1/temp
+
 ## Conclusions
  - code editors 
   - liteide **
