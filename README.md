@@ -43,7 +43,7 @@ Test program in Go+, to check:
 ## Compiling for RaspBerryPi
  - env GOOS=linux GOARCH=arm GOARM=7 go build main.go    
 
-## Test
+## Tests
  - curl -X GET http://127.0.0.1:8080/api/v1/temp
 
 ## Conclusions
@@ -52,6 +52,11 @@ Test program in Go+, to check:
     - code completion, easy installation, quick. 
     - code highlighting for other formats
     - no git integration?
+  - IntellijIdea ***
+    - slow on open
+    - code completion/highlighting, easy installation
+    - very good code highlighting for other formats
+    - git integration
   - atom.io with go-plus * 
     - toooo slow, only small files
   - sublime with gosublime  ???

@@ -2,3 +2,4 @@
 *.exe ~
 main
 go-rpi-temp
+.idea
