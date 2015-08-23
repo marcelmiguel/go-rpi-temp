@@ -11,10 +11,9 @@ Test program in Go+, to check:
 
 2015-08-19
 
-## WIP !!
-
 ## TODO
- - read temp from RaspBerryPi
+ - WIP !!
+ - read temp from various sensors 
  - Configure system via web, 
    - frquency update
    - plotly configuration data
@@ -26,9 +25,11 @@ Test program in Go+, to check:
  - REST interface, probar con curl, documentar API con swagger
  - separar en una unit la lectura de datos y permitir multiplataforma, como cambair ese archivo por plataforma?
  - whitelist/blacklist IP for web access
- - save data to sqllite
+ - save data to sqllite / boltdb / mysql
+ - redirection por 80 to 8080
+ -provide acces to tempsensor1.local on android?
 
-## Configuration
+## Configuration / installation
  - sudo nano /etc/modules
 	add lines:
 	w1-gpio
@@ -36,40 +37,61 @@ Test program in Go+, to check:
  - sudo nano /boot/config.txt
     add line:
 	dtoverlay=w1-gpio
+ - Install ZeroConfig (Bonjour) 
+    sudo apt-get install avahi
+ - Change hostname
+    sudo nano /etc/hostname   
+    -> tempsensor1
+    sudo reboot
+    (zeroconfig client does not work on android)
+ - Copy app on RP2 (p.e. via scp) and run it (via service?)
+ - Configure conf.json, port, API Keys, etc...
+   {
+       "PlotlyAPIToken": "API1234",
+       "PlotlySecret": "secret",
+       "Frequency":4,
+       "Pathw1" : "/sys/bus/w1/devices/",
+       "ServerPort":8080
+   } 
 
 ## Requeriments
  - Go 1.5
 
 ## Compiling for RaspBerryPi
- - env GOOS=linux GOARCH=arm GOARM=7 go build main.go    
+ - env GOOS=linux GOARCH=arm GOARM=7 go build    
+ - go install will not build it
+ - GOARM=7 (is it necessary?)
 
 ## Tests
- - curl -X GET http://127.0.0.1:8080/api/v1/temp
+ - curl -X GET http://tempensor1.local/api/v1/temp
 
 ## Conclusions
  - code editors 
+  - IntellijIdea 14.1.4 ***
+      - slow on open
+      - quite good code completion/highlighting, easy installation
+      - very good code highlighting for other formats
+      - git integration
+      - very good projet managenent
   - liteide **
-    - code completion, easy installation, quick. 
+    - good code completion, easy installation, quick. 
     - code highlighting for other formats
     - no git integration?
-  - IntellijIdea ***
-    - slow on open
-    - code completion/highlighting, easy installation
-    - very good code highlighting for other formats
-    - git integration
   - atom.io with go-plus * 
     - toooo slow, only small files
   - sublime with gosublime  ???
  - Using Go packages is different... GOPATH ...
  - Go cross compilation before 1.5 was ok, after fantastic
- - Default packages are good
+ - Standard package library is good
  - multiple return values, assigning an already created struct TODO
  - Use of Interfaces and not clases ! Good !
  - Language just in the mniddle of Pascal and C
- - Love substring as Python
+ - Love substring selectors as in Python
 
 ## Links
  https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/overview
  http://www.darrencoxall.com/golang/executing-commands-in-go/
  http://blog.pivotal.io/pivotal-labs/labs/next-steps-in-go-code-organization
  https://www.socketloop.com/tutorials/golang-how-to-run-golang-application-such-as-web-server-in-the-background-or-as-daemon
+ http://zackeryfretty.com/posts/assigning-a-local-domain-to-your-raspberry-pi-aka-stop-forgetting-your-ip-address
+ http://stackoverflow.com/questions/31130939/how-to-solve-no-access-control-allow-origin-in-polymer-project
