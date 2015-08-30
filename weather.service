@@ -1,0 +1,18 @@
+# Weather Station systemd file (p4d.service):
+#
+# This service file will start weatherstation at boot, and
+# provide everything needed to use systemctl to control
+# the weather server process.
+
+[Unit]
+Description=Weather Station Server
+After=network.target
+
+[Service]
+Type=simple
+#User=pi
+
+ExecStart=/home/pi/temp/go-rpi-temp
+
+[Install]
+WantedBy=default.target

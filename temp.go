@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	owm "github.com/briandowns/openweathermap"
+	"log"
 )
 
 type Temperature struct {
@@ -17,14 +19,17 @@ type Temperature struct {
 	Valid      bool `json:"valid"`
 	Modified   bool `json:"modified"`
 	Location   string `json:"location"`
+	LocalDescription string `json:"localdescription"`
+	Humidity string `json:"humidity"`
 }
 
 var temps struct {
 	actual   Temperature
 	previous Temperature
+	owm Temperature
 }
 
-func ReadSensorFile(file string) Temperature {
+func ReadSensorFile(configuration *Configuration, file string) Temperature {
 	//fmt.Println("Filename ",file)
 	base := filepath.Base(filepath.Dir(file))
 	tmp := Temperature{}
@@ -65,7 +70,8 @@ func ReadSensorFile(file string) Temperature {
 				} else {
 					tmp.Celsius = celsius / 1000.0
 					tmp.Fahrenheit = tmp.Celsius*9.0/5.0 + 32.0 //TODO pasar a función del strcut
-					tmp.Location = "Barcelona"
+					tmp.Location = configuration.City
+					tmp.LocalDescription = configuration.LocalDescription
 				}
 			}
 		}
@@ -74,7 +80,7 @@ func ReadSensorFile(file string) Temperature {
 	return tmp
 }
 
-func readData(configuration *Configuration, t chan Temperature) {
+func readData(configuration *Configuration, t chan Temperature, dayc chan []Temperature) {
 	files1, _ := filepath.Glob(configuration.Pathw1 + "28*/w1_slave")
 
 	for {
@@ -82,7 +88,7 @@ func readData(configuration *Configuration, t chan Temperature) {
 			<-t
 		}
 		for _, f := range files1 {
-			tmp := ReadSensorFile(f)
+			tmp := ReadSensorFile(configuration, f)
 
 			t <- tmp
 
@@ -94,8 +100,40 @@ func readData(configuration *Configuration, t chan Temperature) {
 				tmp.Modified = false
 			}
 			temps.previous = tmp
+
 		}
 
+		/*if len(t) > 0 {
+			<-t
+		}*/
+
 		time.Sleep(time.Duration(configuration.Frequency) * time.Second)
+	}
+}
+
+func readDataOWM(configuration *Configuration, t chan Temperature) {
+
+	for {
+		if len(t) > 0 {
+			<-t
+		}
+
+		w, err := owm.NewCurrent("C", "ES")
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		w.CurrentByName(configuration.City)
+
+		tmp := Temperature{}
+		tmp.Valid = false
+		tmp.Id = "owm"
+		tmp.Location = configuration.City
+		tmp.LocalDescription = "Open Weather Map"
+		tmp.Celsius = w.Main.Temp
+		tmp.Humidity = strconv.Itoa(w.Main.Humidity)
+		t <- tmp
+
+		time.Sleep(time.Duration(configuration.Frequency*100) * time.Second)
 	}
 }

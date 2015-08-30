@@ -3,3 +3,4 @@
 main
 go-rpi-temp
 .idea/
+client/dist/

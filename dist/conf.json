@@ -1,7 +1,0 @@
-{
-    "PlotlyAPIToken": "API1234",
-    "PlotlySecret": "secret",
-	"Frequency":4,
-    "ServerPort":8080,
-    "Log":false
-}
